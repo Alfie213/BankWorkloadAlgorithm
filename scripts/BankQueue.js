@@ -1,4 +1,5 @@
 import { BankOperation, OperationType } from "./BankOperation.js";
+import { BankWindow } from "./BankWindow.js";
 
 export class BankQueue {
     constructor(startNumBankOperations, numBankWindows) {
@@ -19,26 +20,34 @@ export class BankQueue {
     }
 
     initializeBankWindows(count) {
-        this.numBankWindows = count;
+        this.numBankWindow = count;
         this.bankWindows = [];
-    }
-
-    StartHandleBankOperations() {
-        for (let i = 0; i < this.numBankWindows; i++) {
-            this.bankWindows.push(this.bankWindow(Math.floor(Math.random() * 10000), GetRandomOperationType(), this.onBankWindowFinished));
+        for (let i = 0; i < this.numBankWindow; i++) {
+            this.bankWindows[i] = new BankWindow(i);
         }
     }
 
-    async bankWindow(id, bankOperation, callback){ // Coroutine
-        console.log(`bankWindow ${id} начал выполнение и закончит через ${bankOperation}`);
-        await new Promise((resolve) => setTimeout(resolve, bankOperation)); // Имитация асинхронной операции
-        console.log(`bankWindow ${id} завершил выполнение`);
-        callback(id);
+    StartHandleBankOperations() {
+        for (let i = 0; i < this.numBankWindow; i++) {
+            this.bankWindows[i].HandleBankOperation(this.currentbankOperationsQueue.pop(), this.onBankWindowFinished);
+            // this.bankWindows.push(this.bankWindow(Math.floor(Math.random() * 10000), GetRandomOperationType(), this.onBankWindowFinished));
+        }
     }
 
-    onBankWindowFinished(id) {
-        console.log(`onBankWindowFinished ${id}`);
+    onBankWindowFinished(indexOfBankWindow){
+        console.log(`window ${indexOfBankWindow} finished`)
     }
+
+    // async bankWindow(id, bankOperation, callback){ // Coroutine
+    //     console.log(`bankWindow ${id} начал выполнение и закончит через ${bankOperation}`);
+    //     await new Promise((resolve) => setTimeout(resolve, bankOperation)); // Имитация асинхронной операции
+    //     console.log(`bankWindow ${id} завершил выполнение`);
+    //     callback(id);
+    // }
+
+    // onBankWindowFinished(id) {
+    //     console.log(`onBankWindowFinished ${id}`);
+    // }
 }
 
 function GetRandomOperationType(){
