@@ -7,11 +7,20 @@
 // myFunction();
 
 // const OperationType = require('./OperationType');
-import {OperationType} from './OperationType.js'
+// import {BankOperation} from './BankOperation.js'
 
-function someFunc(){
-  let obf = new OperationType(199);
-  console.log("im someFunc");
-}
+// function someFunc(){
+//   let obf = new BankOperation(199);
+//   console.log("im someFunc");
+// }
 
-someFunc();
+// someFunc();
+
+import { BankQueue } from "./BankQueue.js";
+
+console.log('program start');
+
+const bankQueue = new BankQueue(4, 2);
+bankQueue.StartHandleBankOperations();
+
+// console.log('program finish');
