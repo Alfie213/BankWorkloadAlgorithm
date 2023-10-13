@@ -25,7 +25,7 @@ export class BankQueue {
 
     StartHandleBankOperations() {
         for (let i = 0; i < this.numBankWindows; i++) {
-            this.bankWindows.push(this.bankWindow(Math.floor(Math.random() * 10000), GetRandomOperationType(), this.onBankWindowFinished()));
+            this.bankWindows.push(this.bankWindow(Math.floor(Math.random() * 10000), GetRandomOperationType(), this.onBankWindowFinished));
         }
     }
 
@@ -33,11 +33,11 @@ export class BankQueue {
         console.log(`bankWindow ${id} начал выполнение и закончит через ${bankOperation}`);
         await new Promise((resolve) => setTimeout(resolve, bankOperation)); // Имитация асинхронной операции
         console.log(`bankWindow ${id} завершил выполнение`);
-        callback();
+        callback(id);
     }
 
     onBankWindowFinished(id) {
-        console.log('onBankWindowFinished');
+        console.log(`onBankWindowFinished ${id}`);
     }
 }
 
