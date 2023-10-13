@@ -10,11 +10,11 @@ export class BankQueue {
 
     initializeBankOperations(numOperations) {
         this.currentNumOfBankOperations = numOperations;
-        this.bankOperations = [];
+        this.currentbankOperationsQueue = [];
 
         for (let i = 0; i < this.currentNumOfBankOperations; i++) {
             const bankOperation = new BankOperation(GetRandomOperationType());
-            this.bankOperations.push(bankOperation);
+            this.currentbankOperationsQueue.push(bankOperation);
         }
     }
 
