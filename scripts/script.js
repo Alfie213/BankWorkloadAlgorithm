@@ -19,6 +19,8 @@
 import { BankQueue } from "./BankQueue.js";
 
 console.log('program start');
+
 const bankQueue = new BankQueue(4, 2);
 bankQueue.StartHandleBankOperations();
-console.log('program finish');
+
+// console.log('program finish');

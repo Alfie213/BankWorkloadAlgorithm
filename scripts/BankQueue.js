@@ -17,6 +17,16 @@ export class BankQueue {
             const bankOperation = new BankOperation(GetRandomOperationType());
             this.bankOperationsQueue.push(bankOperation);
         }
+
+        // Debug
+        let timesOfOperations = '';
+        for (let i = this.bankOperationsQueue.length - 1; i >= 0; i--) {
+            const element = this.bankOperationsQueue[i];
+            timesOfOperations += (element.operationType/1000) + ' ';
+        }
+        console.log(`We have ${this.bankOperationsQueue.length} operations. Their time in seconds you can see below.`)
+        console.log(timesOfOperations);
+        // Debug
     }
 
     initializeBankWindows(count) {
@@ -38,7 +48,7 @@ export class BankQueue {
     }
 
     sendBankOperationToBankWindow(bankOperation, bankWindowIndex) {
-        this.bankWindows[bankWindowIndex].HandleBankOperation(bankOperation, this.onBankWindowFinished);
+        this.bankWindows[bankWindowIndex].HandleBankOperation(bankOperation, () => this.onBankWindowFinished(bankWindowIndex));
     }
 
     // Returns BankOperation from this.currentbankOperationsQueue. Else returns undefined.
@@ -56,8 +66,9 @@ export class BankQueue {
 
     onBankWindowFinished(bankWindowIndex) {
         this.decreaseCurrentNumOfBankOperations();
-        console.log(`onBankWindowFinished! Window ${bankWindowIndex} finished.`);
-        const bankOperation = this.tryGetNextBankOperation;
+        // console.log(`onBankWindowFinished!`);
+        console.log(`BankWindow ${bankWindowIndex} finished.`);
+        const bankOperation = this.tryGetNextBankOperation();
         if (bankOperation !== undefined) {
             this.sendBankOperationToBankWindow(bankOperation, bankWindowIndex);
         }
