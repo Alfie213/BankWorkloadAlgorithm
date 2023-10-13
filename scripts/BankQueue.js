@@ -11,11 +11,11 @@ export class BankQueue {
 
     initializeBankOperations(numOperations) {
         this.currentNumOfBankOperations = numOperations;
-        this.currentbankOperationsQueue = [];
+        this.bankOperationsQueue = [];
 
         for (let i = 0; i < this.currentNumOfBankOperations; i++) {
             const bankOperation = new BankOperation(GetRandomOperationType());
-            this.currentbankOperationsQueue.push(bankOperation);
+            this.bankOperationsQueue.push(bankOperation);
         }
     }
 
@@ -29,32 +29,46 @@ export class BankQueue {
 
     StartHandleBankOperations() {
         for (let i = 0; i < this.numBankWindow; i++) {
-            this.bankWindows[i].HandleBankOperation(this.currentbankOperationsQueue.pop(), this.onBankWindowFinished);
-            // this.bankWindows.push(this.bankWindow(Math.floor(Math.random() * 10000), GetRandomOperationType(), this.onBankWindowFinished));
+            const bankOperation = this.tryGetNextBankOperation();
+            if (bankOperation !== undefined) {
+                this.sendBankOperationToBankWindow(bankOperation, i);
+            }
+            else return; // Because if we have met undefined, it means that this.currentbankOperationsQueue is empty. And we don't need to continue.
         }
     }
 
-    onBankWindowFinished(indexOfBankWindow){
-        console.log(`window ${indexOfBankWindow} finished`)
+    sendBankOperationToBankWindow(bankOperation, bankWindowIndex) {
+        this.bankWindows[bankWindowIndex].HandleBankOperation(bankOperation, this.onBankWindowFinished);
     }
 
-    // async bankWindow(id, bankOperation, callback){ // Coroutine
-    //     console.log(`bankWindow ${id} начал выполнение и закончит через ${bankOperation}`);
-    //     await new Promise((resolve) => setTimeout(resolve, bankOperation)); // Имитация асинхронной операции
-    //     console.log(`bankWindow ${id} завершил выполнение`);
-    //     callback(id);
-    // }
+    // Returns BankOperation from this.currentbankOperationsQueue. Else returns undefined.
+    tryGetNextBankOperation() {
+        return this.bankOperationsQueue.pop();
+    }
 
-    // onBankWindowFinished(id) {
-    //     console.log(`onBankWindowFinished ${id}`);
-    // }
+    increaseCurrentNumOfBankOperations() {
+        this.currentNumOfBankOperations += 1;
+    }
+
+    decreaseCurrentNumOfBankOperations() {
+        this.currentNumOfBankOperations -= 1;
+    }
+
+    onBankWindowFinished(bankWindowIndex) {
+        this.decreaseCurrentNumOfBankOperations();
+        console.log(`onBankWindowFinished! Window ${bankWindowIndex} finished.`);
+        const bankOperation = this.tryGetNextBankOperation;
+        if (bankOperation !== undefined) {
+            this.sendBankOperationToBankWindow(bankOperation, bankWindowIndex);
+        }
+    }
 }
 
-function GetRandomOperationType(){
+function GetRandomOperationType() {
     const operationValues = Object.values(OperationType);
     const randomIndex = Math.floor(Math.random() * operationValues.length);
     const randomOperationValue = operationValues[randomIndex];
 
-    console.log(`aloo ${randomOperationValue}`);
+    // console.log(`aloo ${randomOperationValue}`);
     return randomOperationValue;
 }
