@@ -7,8 +7,12 @@ export class BankQueue {
         this.initializeBankWindows(numBankWindows);
 
         this.debugInformation();
-
         // this.startHandleBankOperations();
+    }
+
+    constructor(bankOperations, numBankWindows) {
+        this.AddArray(bankOperations);
+        this.initializeBankWindows(numBankWindows);
     }
 
     debugInformation() {
@@ -51,6 +55,12 @@ export class BankQueue {
 
     Add(bankOperation) {
         this.bankOperationsQueue.push(bankOperation);
+    }
+
+    AddArray(bankOperations) {
+        for (const operation of bankOperations) {
+            this.Add(operation);
+        }
     }
 
     sendBankOperationToBankWindow(bankOperation, bankWindowIndex) {
