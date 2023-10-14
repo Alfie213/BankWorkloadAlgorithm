@@ -2,17 +2,22 @@ import { BankOperation, OperationType } from "./BankOperation.js";
 import { BankWindow } from "./BankWindow.js";
 
 export class BankQueue {
-    constructor(startNumBankOperations, numBankWindows) {
-        this.initializeBankOperations(startNumBankOperations);
+    constructor(numBankWindows, acceptsDisability) {
         this.initializeBankWindows(numBankWindows);
-
-        this.debugInformation();
-        // this.startHandleBankOperations();
+        this.acceptsDisability = acceptsDisability;
     }
 
-    constructor(bankOperations, numBankWindows) {
+    // [Deprecated]
+    // constructor(numBankWindows, acceptsDisability, startNumBankOperations) {
+    //     this(numBankWindows, acceptsDisability);
+    //     this.initializeBankOperations(startNumBankOperations);
+
+    //     this.debugInformation();
+    // }
+
+    constructor(numBankWindows, acceptsDisability, bankOperations) {
+        this(numBankWindows, acceptsDisability);
         this.AddArray(bankOperations);
-        this.initializeBankWindows(numBankWindows);
     }
 
     debugInformation() {
@@ -53,7 +58,18 @@ export class BankQueue {
         }
     }
 
+    checkOpportunityToServe(bankOperation) {
+        return !(bankOperation.disability && !this.acceptsDisability);
+        // if (bankOperation.disability && !this.acceptsDisability) {
+        //     return false;
+        // }
+
+        // return true;
+    }
+
     Add(bankOperation) {
+        if (!this.checkOpportunityToServe()) throw new Error("This BankQueue does not supports this type of BankOperation");
+        this.checkOpportunityToServe();
         this.bankOperationsQueue.push(bankOperation);
     }
 

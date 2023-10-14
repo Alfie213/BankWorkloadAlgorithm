@@ -1,7 +1,8 @@
 export class BankOperation {
     /**@param {OperationType} operationType - Operation type.**/
-    constructor(operationType) {
+    constructor(operationType, disability) {
         this.operationType = operationType;
+        this.disability = disability;
     }
 
 }
