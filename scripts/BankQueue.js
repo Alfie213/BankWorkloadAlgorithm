@@ -27,7 +27,7 @@ export class BankQueue {
 
         for (let i = 0; i < this.currentNumOfBankOperations; i++) {
             const bankOperation = new BankOperation(GetRandomOperationType());
-            this.bankOperationsQueue.push(bankOperation);
+            this.Add(bankOperation);
         }
     }
 
@@ -47,6 +47,10 @@ export class BankQueue {
             }
             else return; // Because if we have met undefined, it means that this.currentbankOperationsQueue is empty. And we don't need to continue.
         }
+    }
+
+    Add(bankOperation) {
+        this.bankOperationsQueue.push(bankOperation);
     }
 
     sendBankOperationToBankWindow(bankOperation, bankWindowIndex) {
