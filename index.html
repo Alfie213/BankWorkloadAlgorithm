@@ -6,8 +6,42 @@
     <link rel="stylesheet" href="./style.css">
     <script type="module" src="./scripts/BankOperation.js"></script>
     <script type="module" src="./scripts/script.js"></script>
+    <title>Масштабируемые окна</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+      }
+  
+      .window {
+        flex: 1;
+        background-color: lightblue;
+        border: 1px solid #000;
+        box-sizing: border-box;
+        min-width: 200px;
+        padding: 20px;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
-    <h1 id="header"></h1>
+    <script>
+      const windowData = [
+        "Окно 1 - Текст 1",
+        "Окно 2 - Текст 2",
+        "Окно 3 - Текст 3",
+        "Окно 4 - Текст 4"
+      ];
+  
+      for (let i = 0; i < windowData.length; i++) {
+        const windowElement = document.createElement("div");
+        windowElement.className = "window";
+        windowElement.textContent = windowData[i];
+        document.body.appendChild(windowElement);
+      }
+    </script>
+  </body>
   </body>
 </html>
