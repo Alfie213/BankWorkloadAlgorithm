@@ -1,26 +1,25 @@
-// async function myFunction() {
-//   console.log('Function called after 5 seconds');
-//   await new Promise(resolve => setTimeout(resolve, 5000));
-//   console.log('5 seconds have passed');
-// }
-
-// myFunction();
-
-// const OperationType = require('./OperationType');
-// import {BankOperation} from './BankOperation.js'
-
-// function someFunc(){
-//   let obf = new BankOperation(199);
-//   console.log("im someFunc");
-// }
-
-// someFunc();
-
 import { BankQueue } from "./BankQueue.js";
+import { BankOperation } from "./BankOperation.js";
+import { OperationType } from "./BankOperation.js";
+
+function GetRandomOperationType() {
+    const operationTypes = Object.values(OperationType);
+    const randomIndex = Math.floor(Math.random() * operationTypes.length);
+    const randomOperationType = operationTypes[randomIndex];
+
+    // console.log(`aloo ${randomOperationValue}`);
+    return randomOperationType;
+}
 
 console.log('program start');
 
-const bankQueue = new BankQueue(4, 2);
+const bankOperations = [];
+const numBankOperations = 8
+for (let i = 0; i < numBankOperations; i++) {
+    const bankOperation = new BankOperation(GetRandomOperationType(), false);
+    bankOperations.push(bankOperation);
+}
+
+const bankQueue = new BankQueue(2, false, bankOperations);
 bankQueue.StartHandleBankOperations();
 
-// console.log('program finish');

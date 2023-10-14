@@ -2,13 +2,12 @@ import { BankOperation, OperationType } from "./BankOperation.js";
 import { BankWindow } from "./BankWindow.js";
 
 export class BankQueue {
-    constructor(startNumBankOperations, numBankWindows) {
-        this.initializeBankOperations(startNumBankOperations);
+    constructor(numBankWindows, acceptsDisability, bankOperations = []) {
         this.initializeBankWindows(numBankWindows);
+        this.acceptsDisability = acceptsDisability;
+        this.initializeBankOperations(bankOperations);
 
         this.debugInformation();
-
-        // this.startHandleBankOperations();
     }
 
     debugInformation() {
@@ -21,14 +20,11 @@ export class BankQueue {
         console.log(timesOfOperations);
     }
 
-    initializeBankOperations(numOperations) {
-        this.currentNumOfBankOperations = numOperations;
+    initializeBankOperations(bankOperations) {
+        this.currentNumOfBankOperations = bankOperations.length;
         this.bankOperationsQueue = [];
 
-        for (let i = 0; i < this.currentNumOfBankOperations; i++) {
-            const bankOperation = new BankOperation(GetRandomOperationType());
-            this.bankOperationsQueue.push(bankOperation);
-        }
+        this.AddArray(bankOperations);
     }
 
     initializeBankWindows(count) {
@@ -46,6 +42,27 @@ export class BankQueue {
                 this.sendBankOperationToBankWindow(bankOperation, i);
             }
             else return; // Because if we have met undefined, it means that this.currentbankOperationsQueue is empty. And we don't need to continue.
+        }
+    }
+
+    checkOpportunityToServe(bankOperation) {
+        return !(bankOperation.disability && !this.acceptsDisability);
+        // if (bankOperation.disability && !this.acceptsDisability) {
+        //     return false;
+        // }
+
+        // return true;
+    }
+
+    Add(bankOperation) {
+        if (!this.checkOpportunityToServe(bankOperation)) throw new Error("This BankQueue does not supports this type of BankOperation");
+        this.bankOperationsQueue.push(bankOperation);
+        this.increaseCurrentNumOfBankOperations();
+    }
+
+    AddArray(bankOperations) {
+        for (const operation of bankOperations) {
+            this.Add(operation);
         }
     }
 
@@ -75,13 +92,4 @@ export class BankQueue {
             this.sendBankOperationToBankWindow(bankOperation, bankWindowIndex);
         }
     }
-}
-
-function GetRandomOperationType() {
-    const operationValues = Object.values(OperationType);
-    const randomIndex = Math.floor(Math.random() * operationValues.length);
-    const randomOperationValue = operationValues[randomIndex];
-
-    // console.log(`aloo ${randomOperationValue}`);
-    return randomOperationValue;
 }
